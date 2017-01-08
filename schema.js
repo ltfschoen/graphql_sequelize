@@ -2,6 +2,7 @@ import {
   GraphQLString,
   GraphQLObjectType,
   GraphQLList,
+  GraphQLNonNull,
   GraphQLSchema
 } from 'graphql'; // Import specific Types from GraphQL
 
@@ -74,7 +75,7 @@ const Section = new GraphQLObjectType({
   }
 });
 
-// Root Query
+// Root Query (i.e. HTTP GET)
 const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',
   description: 'Represents the Root Query',
@@ -109,8 +110,44 @@ const RootQuery = new GraphQLObjectType({
             type: GraphQLString
           }
         },
-        resolve(root, args) {
+        /**
+         *  Source is root/parent.
+         *  Arguments is args
+         *  Abstract Syntax Tree bits of request is ast
+         */
+        resolve(source, args, ast) {
+          console.log(`
+            Root: ${source}\n\n
+            Args: ${args}\n\n
+            AST: ${ast}\n\n
+          `);
           return SequelizeDatabase.models.section.findAll({where: args});
+        }
+      }
+    }
+  }
+});
+
+// Mutations (i.e. HTTP POST)
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  description: 'Functions to create database entries',
+  // Function that returns object of all Public API Methods to query/mutate against
+  fields() {
+    return {
+      addContainer: {
+        type: Container,
+        args: {
+          id: {
+            type: new GraphQLNonNull(GraphQLString)
+          }
+        },
+        // Prevent unauthorised client queries/mutations in `resolve` method by throwing error
+        resolve(_, args) {
+          if (args.id)
+          return SequelizeDatabase.models.container.create({
+            id: args.id
+          })
         }
       }
     }
@@ -119,7 +156,8 @@ const RootQuery = new GraphQLObjectType({
 
 // Schema
 const GraphQLQuerySchema = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
 
 export default GraphQLQuerySchema;

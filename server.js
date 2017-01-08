@@ -21,6 +21,9 @@ app.use(
   '/graphql',
   GraphHTTP({
     schema: GraphQLQuerySchema,
+    rootValue: {
+      message: 'Welcome to GraphQL Sequelize App'
+    },
     pretty: true,
     graphiql: true
   })
