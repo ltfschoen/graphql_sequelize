@@ -24,6 +24,21 @@ const Container = new GraphQLObjectType({
         resolve(container) {
           return container.id
         }
+      },
+      /**
+       *  HAS MANY relationship allows add a (PLURAL) Associated query that may also be called
+       *  as an Independent Query as a field of this query to allow Combined Queries
+       */
+      sections: {
+        type: new GraphQLList(Section),
+        resolve(container) {
+          /**
+           *  Sequelize automatically provides Dynamic Function
+           *  getSections() function that we may call since we declared Associations
+           *  between the two tables (hasMany and belongsTo)
+           */
+          return container.getSections();
+        }
       }
     }
   }
@@ -39,6 +54,20 @@ const Section = new GraphQLObjectType({
         type: GraphQLString,
         resolve(section) {
           return section.id
+        }
+      },
+      /**
+       *  BELONGS TO relationship allows add a (SINGULAR) Associated query that may also be called
+       *  as an Independent Query as a field of this query to allow Combined Queries
+       *  IMPORTANT NOTE: Differs from HAS MANY as follows:
+       *  - container NOT containers
+       *  - getContainer NOT getContainers
+       *  - Container NOT new GraphQLList(Container)  (i.e. one container, not array of containers)
+       */
+      container: {
+        type: Container,
+        resolve(section) {
+          return section.getContainer();
         }
       }
     }
