@@ -50,7 +50,7 @@ Section.belongsTo(Container);
  * Synchronise the Sequelize models and associations with PostgreSQL database.
  * Reinitializes the PostgreSQL tables each time run.
  * Fixtures (fake data) after tables initialised.
- * force checks if tables already exist but just overrides if false
+ * force checks and drops tables if already exist but just overrides if false
  */
 
 SequelizeConnection.sync({force: true}).then(() => {
