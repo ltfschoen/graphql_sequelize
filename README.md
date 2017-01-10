@@ -83,6 +83,11 @@ babel-node server.js
 {
   containers {
     id
+    data {
+      field1
+      field2
+      field3
+    }
   }
 }
 ```
@@ -103,6 +108,11 @@ babel-node server.js
 {
   containers {
     id
+    data {
+      field1
+      field2
+      field3
+    }
     sections {
     	id
     }
@@ -114,6 +124,11 @@ babel-node server.js
     id
     container {
     	id
+        data {
+          field1
+          field2
+          field3
+        }
     	sections {
     		id
         container {
@@ -153,3 +168,6 @@ mutation addContainer {
 
 * https://github.com/graphql/graphql-js/issues/19
 * https://github.com/facebook/relay/issues/77
+* https://github.com/graphql/express-graphql
+* https://learngraphql.com/basics/introduction
+* https://developer.github.com/early-access/graphql/object/query/

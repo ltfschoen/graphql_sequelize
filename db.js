@@ -13,6 +13,12 @@ const SequelizeConnection = new Sequelize(
   }
 );
 
+let sampleBlob = {
+  field1: 'Field 1',
+  field2: 'Field 2',
+  field3: 'Field 3'
+};
+
 function removeSpaces(val) {
   return val.replace(/\s+/, '')
 }
@@ -27,6 +33,9 @@ const Container = SequelizeConnection.define('container', {
     set: function(val) {
       this.setDataValue('id', removeSpaces(val));
     }
+  },
+  data: {
+    type: Sequelize.JSONB
   }
 });
 
@@ -56,7 +65,8 @@ Section.belongsTo(Container);
 SequelizeConnection.sync({force: true}).then(() => {
   _.times(10, () => {
     return Container.create({
-      id: Faker.company.companyName()
+      id: Faker.company.companyName(),
+      data: sampleBlob
     }).then(container => {
       return container.createSection({
         id: Faker.name.firstName() + Faker.name.lastName()

@@ -8,6 +8,16 @@ import {
 
 import SequelizeDatabase from './db';
 
+// Custom Types
+let BlobType = new GraphQLObjectType({
+  name: 'Blob',
+  fields: () => ({
+    field1: { type: GraphQLString },
+    field2: { type: GraphQLString },
+    field3: { type: GraphQLString }
+  })
+});
+
 // Individual Query
 const Container = new GraphQLObjectType({
   name: 'Container',
@@ -24,6 +34,12 @@ const Container = new GraphQLObjectType({
          */
         resolve(container) {
           return container.id
+        }
+      },
+      data: {
+        type: BlobType,
+        resolve(container) {
+          return container.data
         }
       },
       /**
